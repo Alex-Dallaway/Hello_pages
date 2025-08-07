@@ -1,19 +1,50 @@
 ---
 title: "My first page"
+theme: cerulean
+format:
+  html:
+    code-fold: true
+warning: false
 ---
 
 ```{r}
 if(!require (pacman)) install.packages("pacman")
 pacman::p_load(tidyverse,
-               reactable)
+               reactable,
+               plotly)
 ```
+
+::: {.panel-tabset}
 
 ```{r}
 reactable::reactable(infert)
+reactable::reactable(iris)
 ```
 
-
+## plot 1
 ```{r}
-plot(women)
+women <- plot(women)
+ggplotly(women)
 ```
 
+## plot 2
+```{r}
+colplot <- iris %>%
+  group_by(Species) %>% 
+  summarise(avgSepLeng = mean(Sepal.Length)) %>% 
+  ggplot(aes(y = avgSepLeng, x = Species, fill = Species)) +
+  geom_col()
+
+ggplotly(colplot)
+```
+
+## plot 3
+```{r}
+denplot <- iris %>%
+  ggplot(aes(x = Sepal.Length, fill = Species, colour = Species)) +
+  geom_density(alpha = 0.5)
+
+ggplotly(denplot)
+```
+
+:::
